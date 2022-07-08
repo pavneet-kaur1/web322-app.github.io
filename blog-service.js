@@ -36,7 +36,7 @@ getAllPosts = () => {
 getPublishedPosts = () => {
   
   return new Promise((resolve, reject) => {
-    var publish = posts.filter(post => post.published === true)
+    var publish = posts.filter(post => post.published )
     if (publish.length === 0) { 
     reject("no results returned");
   }
@@ -57,13 +57,25 @@ getCategories = () => {
   });
 };
 addPost = (postData) => {
+  var day = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
   return new Promise(function(resolve,reject){
     
      
     try{
 
      postData.published=(postData.published)?true:false;
-     postData.id=posts.length+1;
+      postData.id = posts.length + 1;
+      if(day <10 && month < 10){
+            postData.postDate = year + "-" +  "0" + month + "-" + "0" + day
+        }else if(month <10){
+            postData.postDate = year + "-" + "0" + month + "-" + day
+        }else if (day < 10){
+            postData.postDate = year + "-"+ month + "-" + "0" + day
+        }else{
+            postData.postDate = year + "-" + month + "-" + day
+        }
       posts.push(postData);
      resolve(postData);
     
@@ -102,6 +114,18 @@ getPostsByCategory = (category) => {
     
   });
 }
+}
+getPublishedPostsByCategory = function(category){
+  return new Promise((resolve,reject)=>{
+      if(posts.length > 0){
+        let postsByCategory = posts.filter(post=>{ return post.published == true && post.category == category });
+        if(postsByCategory.length > 0) {
+          resolve(postsByCategory);
+        } else {
+          reject("no results returned");
+        }
+      }
+  })
 }
 getPostsByMinDate = (minDateStr) => {
    
@@ -149,20 +173,24 @@ getPostById = (id) => {
         }   
         else
         {
-          resolve(id_posts);
+          resolve(id_posts[0]);
         } 
         
 });
 
- } 
+} 
+ 
+
 module.exports = {
     initialize,
     getAllPosts,
     getPublishedPosts,
   getCategories,
   addPost,
-  getPostsByCategory,
+    getPostsByCategory,
+   getPublishedPostsByCategory,
   getPostsByMinDate,
-  getPostById 
+  getPostById,
+ 
     
 }
