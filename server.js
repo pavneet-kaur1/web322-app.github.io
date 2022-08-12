@@ -1,33 +1,22 @@
 /******************************************************************************
 ***
-<<<<<<< HEAD
 * WEB322 – Assignment 06
-=======
-* WEB322 – Assignment 05
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy.
 No part of this
 * assignment has been copied manually or electronically from any other source (including web
 sites) or
 * distributed to other students.
 *
-<<<<<<< HEAD
 * Name: __Pavneet Kaur____________________ Student ID: ___128287216___________ Date: __8/05/2022______________
-=======
-* Name: __Pavneet Kaur____________________ Student ID: ___128287216___________ Date: __7/22/2022______________
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
 *
-* Online (Heroku) Link: ________________________________________________________
+* Online (Heroku) Link: __https://enigmatic-peak-50894.herokuapp.com/______________________________________________________
 *
 ******************************************************************************
 **/
 
 var HTTP_PORT = process.env.PORT || 8080;
 var blogData = require('./blog-service');
-<<<<<<< HEAD
 var authData=require('./auth-service')
-=======
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
 const multer = require("multer");
 const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier')
@@ -37,10 +26,7 @@ var path = require('path');
 const stripJs = require('strip-js');
 const { info } = require('console');
 var app = express();
-<<<<<<< HEAD
 const clientSessions = require('client-sessions');
-=======
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
 
 
 app.engine('.hbs',exphbs.engine({
@@ -91,7 +77,6 @@ const upload = multer(); // no { storage: storage }
 //app.use(express.static("static"));
 app.use(express.static('public'));
 app.use(express.static('views'));
-<<<<<<< HEAD
 //client-session middleware
 app.use(clientSessions( {
     cookieName: "session",
@@ -113,8 +98,6 @@ ensureLogin = (req,res,next) => {
         next();
     }
 };
-=======
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
 
 // setup a 'route' to listen on the default url path
 app.get("/", (req, res) => {
@@ -181,11 +164,7 @@ app.get('/blog/:id', async (req, res) => {
     res.render("blog", {data: viewData})
 });
 
-<<<<<<< HEAD
 app.get("/posts",ensureLogin,(req, res) => {
-=======
-app.get("/posts", (req, res) => {
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
     var cat = req.query.category;
     var minDat = req.query.minDate;
    //for the route /posts?category=value
@@ -227,11 +206,7 @@ app.get("/posts", (req, res) => {
 });
 
 
-<<<<<<< HEAD
 app.post("/posts/add",ensureLogin,upload.single("featureImage"),(req, res) => {
-=======
-app.post("/posts/add",upload.single("featureImage"),(req, res) => {
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
     let streamUpload = (req) => {
         return new Promise((resolve, reject) => {
             let stream = cloudinary.uploader.upload_stream(
@@ -266,11 +241,7 @@ app.use(function(req,res,next){
     next();
     });
 
-<<<<<<< HEAD
 app.get("/posts/add",ensureLogin, (req, res) => {
-=======
-app.get("/posts/add", (req, res) => {
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
     blogData.getCategories().then((data) => {
         res.render('addPost',{
             categories: data
@@ -281,7 +252,6 @@ app.get("/posts/add", (req, res) => {
 
 
 //for "/post/value
-<<<<<<< HEAD
 app.get("/posts/:id",ensureLogin,(req, res) => {
     blogData.getPostById(req.params.id).then((getResponse)=>{res.send(getResponse)}).catch((getReject)=>{res.send(getReject)})
 });
@@ -360,52 +330,11 @@ app.get("/userHistory", ensureLogin, (req,res) => {
     res.render("userHistory", {user:req.session.user} );
 })
 
-=======
-app.get("/posts/:id", (req, res) => {
-    blogData.getPostById(req.params.id).then((getResponse)=>{res.send(getResponse)}).catch((getReject)=>{res.send(getReject)})
-});
-
-app.get("/posts/delete/:id", (req, res) => {
-    blogData.deletePostById(req.params.id).then(() => {
-        res.redirect('/posts');
-    }).catch(console.log("Unable to Remove Post / Post not found"))
-});
-
-app.get("/categories", (req, res) => {
-    
-  blogData.getCategories().then((getResponse) => {
-    if (getResponse.length > 0)
-    { res.render("categories", { categories: getResponse }) }
-    else {
-       res.render("categories",{message: "No results" });
-    }
-
-  }).catch(() => { res.render("categories", { message: "No results" }) })
-});
-
-app.get("/categories/add", (req, res) => {
-    res.render('addCategory')
-});
-
-app.post("/categories/add", (req, res) => {
-    blogData.addCategory(req.body).then(() => {
-        res.redirect('/categories');
-    }).catch(console.log("Unable to Add category"))
-});
-
-app.get("/categories/delete/:id", (req, res) => {
-    blogData.deleteCategoryById(req.params.id).then(() => {
-        res.redirect('/categories');
-    }).catch(console.log("Unable to Remove Category / Category not found)"))
-});
-
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
 app.use((req, res) => {
   res.status(404).render('404');
 });
 
 blogData.initialize()
-<<<<<<< HEAD
 .then(authData.initialize)
 .then(function(){
  app.listen(HTTP_PORT, function(){
@@ -414,8 +343,3 @@ blogData.initialize()
 }).catch(function(err){
  console.log("unable to start server: " + err);
 });
-=======
-.then(()=>{
-    app.listen(HTTP_PORT,()=>{console.log(`Listening to port ${HTTP_PORT}`)})
-}).catch(()=>{console.log("Fail to initialize the data.")}) 
->>>>>>> 45424fa74a04e1c1e865d5bdd335adc56247c7d3
